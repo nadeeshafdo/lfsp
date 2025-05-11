@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}LFSP - Home{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-8">
+        <h1 class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">Welcome to LFSP</h1>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">The Local Files Sharing Platform provides a safer, more convenient, and more versatile alternative to directly connecting external storage devices via USB.</p>
+        
+        <div class="bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-500 p-4 mb-6">
+            <p class="text-blue-800 dark:text-blue-300">Share your files securely over your local network without the need for physical connections.</p>
+        </div>
+        
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">Key Features</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded border border-gray-200 dark:border-gray-600">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                    </svg>
+                    <h3 class="text-lg font-semibold">Secure Sharing</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">Share your files with password protection and set expiration times for links.</p>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded border border-gray-200 dark:border-gray-600">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                    </svg>
+                    <h3 class="text-lg font-semibold">Read-Only Access</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">Protect your original files with read-only access by default.</p>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded border border-gray-200 dark:border-gray-600">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <h3 class="text-lg font-semibold">No USB Needed</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">Share files over your network without the security risks of USB connections.</p>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded border border-gray-200 dark:border-gray-600">
+                <div class="flex items-center mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <h3 class="text-lg font-semibold">Multiple Platforms</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300">Works on Windows, macOS, and Linux systems with any modern browser.</p>
+            </div>
+        </div>
+        
+        <div class="flex justify-center space-x-4">
+            <a href="{{ url_for('select_storage') }}" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                Share Your Files
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                View Dashboard
+            </a>
+        </div>
+    </div>
+    
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">How It Works</h2>
+        
+        <div class="space-y-4">
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold mr-4">1</div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Select Storage</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Choose any storage device or folder you want to share.</p>
+                </div>
+            </div>
+            
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold mr-4">2</div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Configure Access</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Set password protection, expiration time, and access permissions.</p>
+                </div>
+            </div>
+            
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold mr-4">3</div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Share Link</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Get a secure link to share with others on your network.</p>
+                </div>
+            </div>
+            
+            <div class="flex">
+                <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold mr-4">4</div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Access Files</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Recipients can browse and download files from their browser.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}LFSP - Link Created{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <div class="text-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-green-500 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-4">Link Generated Successfully!</h1>
+        </div>
+        
+        <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">Share this link with the people you want to give access to your files.</p>
+        
+        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600 mb-6">
+            <div class="flex">
+                <input id="share-link" type="text" value="{{ link }}" readonly class="flex-grow rounded-l-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white">
+                <button onclick="copyLink()" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-r-lg transition duration-300">
+                    Copy
+                </button>
+            </div>
+        </div>
+        
+        <div class="space-y-4 mb-8">
+            <div class="bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            This link will only work for people on the same network as you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="link-details" class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <p><strong>Link ID:</strong> {{ link_id }}</p>
+                <p><strong>Access:</strong> You can view, manage, and revoke this link from your dashboard.</p>
+            </div>
+        </div>
+        
+        <div class="flex justify-between">
+            <a href="{{ url_for('select_storage') }}" class="bg-gray-500 hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Share Another Folder
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function copyLink() {
+        var linkInput = document.getElementById("share-link");
+        linkInput.select();
+        document.execCommand("copy");
+        
+        // Show feedback
+        var button = linkInput.nextElementSibling;
+        var originalText = button.textContent;
+        button.textContent = "Copied!";
+        button.classList.remove("bg-blue-600", "hover:bg-blue-700", "dark:bg-blue-700", "dark:hover:bg-blue-800");
+        button.classList.add("bg-green-600", "hover:bg-green-700", "dark:bg-green-700", "dark:hover:bg-green-800");
+        
+        setTimeout(function() {
+            button.textContent = originalText;
+            button.classList.remove("bg-green-600", "hover:bg-green-700", "dark:bg-green-700", "dark:hover:bg-green-800");
+            button.classList.add("bg-blue-600", "hover:bg-blue-700", "dark:bg-blue-700", "dark:hover:bg-blue-800");
+        }, 2000);
+    }
+</script>
+{% endblock %}

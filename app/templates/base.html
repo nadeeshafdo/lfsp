@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LFSP - Local Files Sharing Platform{% endblock %}</title>
+    
+    <!-- Tailwind CSS from CDN (latest version) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Dark Mode Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#3B82F6', // blue-500
+                            dark: '#2563EB'   // blue-600
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom styles -->
+    <style>
+        /* Add any custom styles here if needed */
+        .dark body {
+            background-color: #111827; /* gray-900 */
+            color: #F9FAFB; /* gray-50 */
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 dark:bg-gray-800 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-bold">
+                    <a href="{{ url_for('index') }}" class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        <span>LFSP</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('index') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Home</a>
+                    <a href="{{ url_for('select_storage') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Share Files</a>
+                    <a href="{{ url_for('dashboard') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Dashboard</a>
+                    <button id="theme-toggle" type="button" class="ml-2 text-gray-200 hover:text-white focus:outline-none">
+                        <!-- Sun icon (light mode) -->
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                        <!-- Moon icon (dark mode) -->
+                        <svg id="theme-toggle-dark-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="container mx-auto mt-4 px-4">
+        {% for message in messages %}
+        <div class="bg-yellow-100 dark:bg-yellow-900 border-l-4 border-yellow-500 text-yellow-700 dark:text-yellow-300 p-4 mb-2" role="alert">
+            <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-950 text-white py-4">
+        <div class="container mx-auto px-4">
+            <p class="text-center">&copy; 2025 LFSP - Local Files Sharing Platform</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Check for saved theme preference or use the system preference
+        if (localStorage.getItem('color-theme') === 'light' || 
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            document.documentElement.classList.remove('dark');
+            document.getElementById('theme-toggle-light-icon').classList.add('hidden');
+            document.getElementById('theme-toggle-dark-icon').classList.remove('hidden');
+        } else {
+            document.documentElement.classList.add('dark');
+            document.getElementById('theme-toggle-light-icon').classList.remove('hidden');
+            document.getElementById('theme-toggle-dark-icon').classList.add('hidden');
+        }
+        
+        // Add event listener for the theme toggle button
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle icons
+            themeToggleLightIcon.classList.toggle('hidden');
+            themeToggleDarkIcon.classList.toggle('hidden');
+            
+            // If dark mode is set, toggle it
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

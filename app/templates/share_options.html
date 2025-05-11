@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}LFSP - Sharing Options{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Configure Sharing Options</h1>
+        
+        <p class="text-gray-600 dark:text-gray-300 mb-6">Set security and access options for the shared folder.</p>
+        
+        <form method="POST" action="{{ url_for('share_options', device_id=device_id) }}" class="space-y-6">
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password Protection (Optional)</label>
+                <input type="password" id="password" name="password" class="w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white" placeholder="Leave blank for no password">
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">If set, users will need this password to access shared files</p>
+            </div>
+            
+            <div>
+                <label for="expiry_hours" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Link Expiration Time</label>
+                <select id="expiry_hours" name="expiry_hours" class="w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="1">1 hour</option>
+                    <option value="3">3 hours</option>
+                    <option value="6">6 hours</option>
+                    <option value="12">12 hours</option>
+                    <option value="24" selected>24 hours</option>
+                    <option value="48">2 days</option>
+                    <option value="72">3 days</option>
+                    <option value="168">1 week</option>
+                </select>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">The link will automatically expire after this time</p>
+            </div>
+            
+            <div class="flex items-center">
+                <input type="checkbox" id="readonly" name="readonly" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded" checked>
+                <label for="readonly" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Read-only access (recommended)</label>
+            </div>
+            
+            <div class="bg-blue-50 dark:bg-blue-900 border-l-4 border-blue-400 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700 dark:text-blue-300">
+                            For security, we recommend keeping read-only access enabled. This prevents modification of your original files.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-2">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Generate Sharing Link
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

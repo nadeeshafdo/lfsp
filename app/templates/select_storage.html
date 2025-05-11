@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}LFSP - Select Storage{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Select Storage to Share</h1>
+        
+        <p class="text-gray-600 dark:text-gray-300 mb-6">Choose a folder or drive that you want to share. This will be accessible to others via a secure link.</p>
+        
+        {% if system_drives %}
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Available Drives</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {% for drive in system_drives %}
+                <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer" onclick="selectDrive('{{ drive }}')">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                        <span class="text-gray-800 dark:text-gray-200">{{ drive }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <form method="POST" action="{{ url_for('select_storage') }}" class="space-y-6">
+            <div>
+                <label for="folder_path" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Path to folder or drive</label>
+                <div class="flex">
+                    <input type="text" id="folder_path" name="folder_path" class="flex-grow rounded-l-lg border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white" placeholder="e.g., C:\Users\Username\Documents">
+                    <button type="button" onclick="browseFolder()" class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-r-lg border border-gray-300 dark:border-gray-700">
+                        Browse
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Enter the full path to the folder or drive you want to share</p>
+            </div>
+            
+            <div class="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-yellow-700 dark:text-yellow-300">
+                            Only share folders that you have permission to share. Never share sensitive or personal information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pt-2">
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Continue to Sharing Options
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function browseFolder() {
+        // In a real implementation, this would open a file browser dialog
+        // Since this isn't possible with pure JavaScript in a browser for security reasons,
+        // this would typically be implemented with a native application component
+        alert("In a complete implementation, this would open a file browser dialog. For now, please manually enter the folder path.");
+    }
+    
+    function selectDrive(drive) {
+        document.getElementById('folder_path').value = drive;
+    }
+</script>
+{% endblock %}
