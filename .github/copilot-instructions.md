@@ -9,6 +9,7 @@ This is a Python Flask web application for a Local Files Sharing Platform (LFSP)
 3. In-memory storage for links and shared devices
 4. Features: sharing links, password protection, expiration times, read-only access
 
+---
 
 # Software Requirements Specification (SRS) Document: LFSP - Local Files Sharing Platform
 
@@ -100,13 +101,12 @@ Minimal dependencies on external libraries.
 
 3.1 Functional Requirements
 
-
 | ID  | Description  | Priority  | Priority  |
 | --- | --- | --- | --- |
 | FR01  | Allow users to select a storage device/partition. | High  | High  |
 | FR02  | Generate a unique, temporary link for access.  | High  | High  |
 | FR03  | Enforce read-only access to shared storage.  | High  | High  |
-| FR04  | Allow users to set a password for the shared<br>link.  | Medium  | Medium  |
+| FR04  | Allow users to set a password for the shared link.  | Medium  | Medium  |
 | FR05 ID  | Allow users to set an expiration time for the link. Description  | Allow users to set an expiration time for the link. Description  | Medium Priority  |
 | FR06  | Display the status of shared devices/links. | Display the status of shared devices/links. | Medium  |
 | FR07  | Support multiple concurrent connections.  | Support multiple concurrent connections.  | Low  |
