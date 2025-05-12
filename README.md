@@ -27,24 +27,29 @@ LFSP provides a safer, more convenient, and more versatile alternative to direct
 
 1. Clone this repository or download the source code
 2. Create a virtual environment (recommended):
-   ```
+
+   ```bash
    python -m venv venv
    ```
+
 3. Activate the virtual environment:
    - Windows: `venv\Scripts\activate`
    - macOS/Linux: `source venv/bin/activate`
 4. Install the required dependencies:
-   ```
+
+   ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
 
 1. Start the application:
-   ```
+
+   ```bash
    python app.py
    ```
-2. Open a web browser and navigate to the URL displayed in the terminal (usually http://localhost:5000 or http://<your-ip-address>:5000)
+
+2. Open a web browser and navigate to the URL displayed in the terminal (usually `http://localhost:5000` or `http://192.XXX.XXX.XX:5000`)
 3. Select a storage device or folder to share
 4. Configure sharing options (password, expiration time, access permissions)
 5. Share the generated link with others on your network
@@ -60,6 +65,7 @@ LFSP provides a safer, more convenient, and more versatile alternative to direct
 ## Development
 
 The application is built with:
+
 - Flask for the backend
 - Tailwind CSS for UI design
 - JavaScript for interactive components
