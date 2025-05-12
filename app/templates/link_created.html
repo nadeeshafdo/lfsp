@@ -16,7 +16,8 @@
         
         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600 mb-6">
             <div class="flex">
-                <input id="share-link" type="text" value="{{ link }}" readonly class="flex-grow rounded-l-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white">
+                <label for="share-link" class="sr-only">Shareable link URL</label>
+                <input id="share-link" type="text" value="{{ link }}" readonly aria-label="Shareable link URL" placeholder="Shareable link URL" class="flex-grow rounded-l-lg border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:text-white">
                 <button onclick="copyLink()" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-r-lg transition duration-300">
                     Copy
                 </button>
