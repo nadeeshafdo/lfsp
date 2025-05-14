@@ -19,6 +19,9 @@
                             light: '#3B82F6', // blue-500
                             dark: '#2563EB'   // blue-600
                         }
+                    },
+                    screens: {
+                        'xs': '475px',
                     }
                 }
             }
@@ -31,6 +34,22 @@
         .dark body {
             background-color: #111827; /* gray-900 */
             color: #F9FAFB; /* gray-50 */
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
     </style>
     {% block head %}{% endblock %}
@@ -48,10 +67,12 @@
                         <span>LFSP</span>
                     </a>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ url_for('index') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Home</a>
-                    <a href="{{ url_for('select_storage') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Share Files</a>
-                    <a href="{{ url_for('dashboard') }}" class="hover:text-blue-200 dark:hover:text-blue-300">Dashboard</a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="{{ url_for('index') }}" class="hover:text-blue-200 dark:hover:text-blue-300 transition duration-150">Home</a>
+                    <a href="{{ url_for('select_storage') }}" class="hover:text-blue-200 dark:hover:text-blue-300 transition duration-150">Share Files</a>
+                    <a href="{{ url_for('dashboard') }}" class="hover:text-blue-200 dark:hover:text-blue-300 transition duration-150">Dashboard</a>
                     <button id="theme-toggle" type="button" class="ml-2 text-gray-200 hover:text-white focus:outline-none" title="Toggle theme">
                         <!-- Sun icon (light mode) -->
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -62,6 +83,34 @@
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                         </svg>
                     </button>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="theme-toggle-mobile" type="button" class="mr-3 text-gray-200 hover:text-white focus:outline-none" title="Toggle theme">
+                        <!-- Sun icon (light mode) -->
+                        <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                        <!-- Moon icon (dark mode) -->
+                        <svg id="theme-toggle-dark-icon-mobile" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                    <button id="mobile-menu-button" class="text-white focus:outline-none" title="Menu">
+                        <svg class="h-6 w-6" x-description="Heroicon name: menu" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-3 pb-2">
+                <div class="flex flex-col space-y-2">
+                    <a href="{{ url_for('index') }}" class="py-2 px-1 hover:bg-blue-700 dark:hover:bg-gray-700 rounded transition duration-150">Home</a>
+                    <a href="{{ url_for('select_storage') }}" class="py-2 px-1 hover:bg-blue-700 dark:hover:bg-gray-700 rounded transition duration-150">Share Files</a>
+                    <a href="{{ url_for('dashboard') }}" class="py-2 px-1 hover:bg-blue-700 dark:hover:bg-gray-700 rounded transition duration-150">Dashboard</a>
                 </div>
             </div>
         </div>
@@ -95,35 +144,63 @@
     <!-- JavaScript -->
     <script>
         // Check for saved theme preference or use the system preference
-        if (localStorage.getItem('color-theme') === 'light' || 
-            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-            document.documentElement.classList.remove('dark');
-            document.getElementById('theme-toggle-light-icon').classList.add('hidden');
-            document.getElementById('theme-toggle-dark-icon').classList.remove('hidden');
-        } else {
-            document.documentElement.classList.add('dark');
-            document.getElementById('theme-toggle-light-icon').classList.remove('hidden');
-            document.getElementById('theme-toggle-dark-icon').classList.add('hidden');
+        function setThemeIcons(isDark) {
+            // Desktop icons
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            
+            // Mobile icons
+            const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
+            const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+            
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                lightIcon.classList.remove('hidden');
+                darkIcon.classList.add('hidden');
+                lightIconMobile.classList.remove('hidden');
+                darkIconMobile.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+                lightIconMobile.classList.add('hidden');
+                darkIconMobile.classList.remove('hidden');
+            }
         }
         
-        // Add event listener for the theme toggle button
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        if (localStorage.getItem('color-theme') === 'light' || 
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            setThemeIcons(false);
+        } else {
+            setThemeIcons(true);
+        }
         
-        themeToggleBtn.addEventListener('click', function() {
-            // Toggle icons
-            themeToggleLightIcon.classList.toggle('hidden');
-            themeToggleDarkIcon.classList.toggle('hidden');
-            
+        // Add event listener for the theme toggle buttons
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+        
+        function toggleTheme() {
             // If dark mode is set, toggle it
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            if (isDark) {
+                setThemeIcons(false);
                 localStorage.setItem('color-theme', 'light');
             } else {
-                document.documentElement.classList.add('dark');
+                setThemeIcons(true);
                 localStorage.setItem('color-theme', 'dark');
             }
+        }
+        
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleMobileBtn.addEventListener('click', toggleTheme);
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
         });
     </script>
     {% block scripts %}{% endblock %}
