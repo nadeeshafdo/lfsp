@@ -2,8 +2,7 @@ import os
 import platform
 import psutil
 import shutil
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, abort, jsonify, session
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, abort
 import secrets
 import datetime
 import uuid
@@ -13,11 +12,7 @@ import socket
 app = Flask(__name__, 
             template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "app", "templates"))
 app.config['SECRET_KEY'] = secrets.token_hex(16)
-app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'shared_files')
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 1024  # 1GB max file size
-
-# Ensure upload directory exists
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Store shared links
 # Format: {link_id: {path: path, password: password, expiry: datetime, readonly: True}}
