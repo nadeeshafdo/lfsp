@@ -1,6 +1,6 @@
-flask==2.0.1
-werkzeug==2.0.1
-Flask-WTF
+flask
+werkzeug
+flask-wtf
 python-dotenv
-psutil==5.9.0
-pywin32==304; platform_system == "Windows"
+psutil
+pywin32; platform_system == "Windows"
