@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}LFSP - View Media{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 md:p-8">
+        <div class="mb-4">
+            <a href="{{ url_for('access_shared', link_id=link_id, subfolder=parent_folder if parent_folder else '') }}" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Back to files
+            </a>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-4 md:mb-6">{{ file_name }}</h1>
+
+        <div class="aspect-w-16 aspect-h-9">
+            {% if media_type == 'video' %}
+                <video controls class="w-full h-auto rounded-lg shadow-lg" src="{{ url_for('stream_media', link_id=link_id, file_path=file_path) }}" type="video/{{ file_path.split('.')[-1].lower() }}">
+                    Your browser does not support the video tag.
+                </video>
+            {% elif media_type == 'audio' %}
+                <audio controls class="w-full rounded-lg shadow-lg" src="{{ url_for('stream_media', link_id=link_id, file_path=file_path) }}" type="audio/{{ file_path.split('.')[-1].lower() }}">
+                    Your browser does not support the audio element.
+                </audio>
+            {% elif media_type == 'image' %}
+                <img src="{{ url_for('stream_media', link_id=link_id, file_path=file_path) }}" alt="{{ file_name }}" class="w-full h-auto rounded-lg shadow-lg object-contain">
+            {% else %}
+                <p class="text-red-500 dark:text-red-400">Unsupported media type.</p>
+            {% endif %}
+        </div>
+        
+        <div class="mt-6 text-center">
+            <a href="{{ url_for('download_file', link_id=link_id, file=file_path) }}" class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Download File
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
