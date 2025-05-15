@@ -2,7 +2,7 @@ import os
 import platform
 import psutil
 import shutil
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, abort, Response
 import secrets
 import datetime
 import uuid
@@ -160,12 +160,23 @@ def access_shared(link_id):
             # Get relative path for links
             rel_path = os.path.join(subfolder, item) if subfolder else item
             
+            # Safely get size and modified time
+            try:
+                size = os.path.getsize(item_path) if not os.path.isdir(item_path) else 0
+            except Exception:
+                size = 0
+            try:
+                modified = datetime.datetime.fromtimestamp(os.path.getmtime(item_path))
+            except Exception:
+                modified = None
+            
             items.append({
                 'name': item,
                 'is_dir': os.path.isdir(item_path),
-                'size': os.path.getsize(item_path) if not os.path.isdir(item_path) else 0,
-                'modified': datetime.datetime.fromtimestamp(os.path.getmtime(item_path)),
-                'path': rel_path
+                'size': size,
+                'modified': modified,
+                'path': rel_path,
+                'is_media': any(item.lower().endswith(ext) for ext in ['.mp3', '.wav', '.ogg', '.mp4', '.webm', '.mov', '.jpg', '.jpeg', '.png', '.gif'])
             })
     except PermissionError:
         abort(403, description="Permission denied to access this directory")
@@ -217,6 +228,88 @@ def download_file(link_id):
     
     except Exception as e:
         abort(500, description=str(e))
+
+@app.route('/shared/<link_id>/stream/<path:file_path>')
+def stream_media(link_id, file_path):
+    """Stream a media file from a shared folder."""
+    if link_id not in shared_links:
+        abort(404, description="Link not found or has expired")
+
+    link_info = shared_links[link_id]
+
+    if datetime.datetime.now() > link_info['expiry']:
+        shared_links.pop(link_id)
+        abort(410, description="This link has expired")
+
+    try:
+        full_path = os.path.normpath(os.path.join(link_info['path'], file_path))
+        if not full_path.startswith(os.path.normpath(link_info['path'])):
+            abort(403, description="Access denied - attempted path traversal")
+
+        if not os.path.exists(full_path) or os.path.isdir(full_path):
+            abort(404, description="File not found")
+
+        # Determine MIME type
+        mime_type = None
+        if file_path.lower().endswith(('.mp4', '.mov', '.webm')):
+            mime_type = 'video/' + file_path.split('.')[-1]
+        elif file_path.lower().endswith(('.mp3', '.wav', '.ogg')):
+            mime_type = 'audio/' + file_path.split('.')[-1]
+        elif file_path.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+            mime_type = 'image/' + file_path.split('.')[-1]
+        
+        if mime_type:
+            return send_from_directory(os.path.dirname(full_path), os.path.basename(full_path), mimetype=mime_type, as_attachment=False)
+        else:
+            # Fallback to download if not a recognized media type for streaming
+            return send_from_directory(os.path.dirname(full_path), os.path.basename(full_path), as_attachment=True)
+
+    except Exception as e:
+        app.logger.error(f"Error streaming file: {e}")
+        abort(500, description=str(e))
+
+@app.route('/shared/<link_id>/view/<path:file_path>')
+def view_media_page(link_id, file_path):
+    """Render a page to view a media file."""
+    if link_id not in shared_links:
+        abort(404, description="Link not found or has expired")
+
+    link_info = shared_links[link_id]
+
+    if datetime.datetime.now() > link_info['expiry']:
+        shared_links.pop(link_id)
+        abort(410, description="This link has expired")
+
+    # Basic password check (if navigating directly to this page)
+    if link_info['password'] and not request.cookies.get(f'password_verified_{link_id}'):
+        # This is a simplified check. In a real app, you might redirect to password_prompt
+        # or ensure the session/cookie is robustly set after password verification.
+        flash("Password required to view this content.")
+        return redirect(url_for('access_shared', link_id=link_id))
+
+    media_type = None
+    file_lower = file_path.lower()
+    if any(file_lower.endswith(ext) for ext in ['.mp4', '.webm', '.mov', '.ogg']): # .ogg can be video too
+        media_type = 'video'
+    elif any(file_lower.endswith(ext) for ext in ['.mp3', '.wav', '.aac']):
+        media_type = 'audio'
+    elif any(file_lower.endswith(ext) for ext in ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp']):
+        media_type = 'image'
+    else:
+        abort(400, description="Unsupported file type for viewing.")
+
+    # Determine the parent folder for the 'Back to files' link
+    # The file_path is relative to the shared root. 
+    # If file_path is 'folder1/image.jpg', parent is 'folder1'
+    # If file_path is 'image.jpg', parent is '' (root of the share)
+    parent_folder = os.path.dirname(file_path)
+
+    return render_template('view_media.html', 
+                           link_id=link_id, 
+                           file_path=file_path, 
+                           file_name=os.path.basename(file_path),
+                           media_type=media_type,
+                           parent_folder=parent_folder)
 
 @app.route('/dashboard')
 def dashboard():
