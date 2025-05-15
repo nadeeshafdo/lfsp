@@ -1,4 +1,26 @@
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+# Copilot Custom Instructions (Updated: 2025-05-16)
+
+## Role-Based Architecture & Session Logic
+- Two roles: `admin` and `user` (Standard User).
+- The first user (admin) is registered at runtime via the terminal (username + password).
+- All other users log in via the web UI with just a username (no password).
+- Only one active session per user is allowed at a time (single login instance per user per runtime).
+- Admin can promote a Standard User to Admin via the web UI.
+- Admin-only actions: storage selection, sharing, revoking links, unmounting devices, user management.
+- Standard Users can only access shared links and view their own session.
+- Sessions are isolated per browser tab (independent sessions).
+
+## Implementation Notes
+- Use in-memory storage for users, sessions, and roles (no persistent DB).
+- Admin registration logic is in the main block before app.run().
+- Use Flask session for per-tab session isolation.
+- Use decorators for role-based access control.
+
+## UI/UX
+- Login page supports both admin (username + password) and user (username only).
+- Admin can view and promote users from a user management page.
+
+---
 
 # Project Information
 
